@@ -52,8 +52,11 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionOpen"/>
-    <addaction name="actionNew"/>
+    <addaction name="actionNew_project"/>
+    <addaction name="actionOpen_project"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_project"/>
+    <addaction name="actionSave_project_as"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -66,20 +69,31 @@
     </property>
     <addaction name="actionLayers_Window"/>
    </widget>
+   <widget class="QMenu" name="menuLayers">
+    <property name="title">
+     <string>Layers</string>
+    </property>
+    <widget class="QMenu" name="menuAdd_Layer">
+     <property name="title">
+      <string>Add Layer</string>
+     </property>
+     <addaction name="actionRaster_Layer"/>
+     <addaction name="actionVector_Layer"/>
+    </widget>
+    <addaction name="menuAdd_Layer"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionOpen_geojson_io"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
+   <addaction name="menuLayers"/>
+   <addaction name="menuTools"/>
   </widget>
-  <action name="actionOpen">
-   <property name="text">
-    <string>Open</string>
-   </property>
-  </action>
-  <action name="actionNew">
-   <property name="text">
-    <string>New</string>
-   </property>
-  </action>
   <action name="actionLayers_Window">
    <property name="checkable">
     <bool>true</bool>
@@ -89,6 +103,59 @@
    </property>
    <property name="text">
     <string>Layers Window</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionRaster_Layer">
+   <property name="text">
+    <string>Raster Layer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionVector_Layer">
+   <property name="text">
+    <string>Vector Layer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="actionNew_project">
+   <property name="text">
+    <string>New project</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionOpen_project">
+   <property name="text">
+    <string>Open project</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSave_project">
+   <property name="text">
+    <string>Save project</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_project_as">
+   <property name="text">
+    <string>Save project as...</string>
+   </property>
+  </action>
+  <action name="actionOpen_geojson_io">
+   <property name="text">
+    <string>Open geojson.io</string>
    </property>
   </action>
  </widget>

@@ -47,64 +47,13 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="rasterLayerTab">
     <attribute name="title">
      <string>Raster</string>
     </attribute>
-    <widget class="QComboBox" name="mapTypeBox_2">
-     <property name="geometry">
-      <rect>
-       <x>135</x>
-       <y>82</y>
-       <width>408</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="editable">
-      <bool>false</bool>
-     </property>
-     <item>
-      <property name="text">
-       <string>Open Street Maps</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Mapbox Bright</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Mapbox Control Room</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Stamen</string>
-      </property>
-     </item>
-    </widget>
-    <widget class="QLabel" name="mapTypeLabel_2">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>80</y>
-       <width>101</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Map type</string>
-     </property>
-    </widget>
-    <widget class="QPlainTextEdit" name="mapLayerName_2">
+    <widget class="QPlainTextEdit" name="rasterLayerName">
      <property name="geometry">
       <rect>
        <x>40</x>
@@ -119,7 +68,7 @@
       </font>
      </property>
     </widget>
-    <widget class="QLabel" name="mapLayerNameLabel_2">
+    <widget class="QLabel" name="rasterLayerNameLabel">
      <property name="geometry">
       <rect>
        <x>40</x>
@@ -140,8 +89,8 @@
     <widget class="QPushButton" name="addRasterLayerButton">
      <property name="geometry">
       <rect>
-       <x>423</x>
-       <y>122</y>
+       <x>420</x>
+       <y>180</y>
        <width>121</width>
        <height>31</height>
       </rect>
@@ -159,6 +108,233 @@
      </property>
      <property name="default">
       <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="rasterFileNameLabel">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>80</y>
+       <width>271</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Enter file path</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="openRasterFileButton">
+     <property name="geometry">
+      <rect>
+       <x>452</x>
+       <y>110</y>
+       <width>91</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Open</string>
+     </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QPlainTextEdit" name="rasterFilePathName">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>110</y>
+       <width>405</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>17</pointsize>
+      </font>
+     </property>
+     <property name="inputMethodHints">
+      <set>Qt::ImhNone</set>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="lineWrapMode">
+      <enum>QPlainTextEdit::NoWrap</enum>
+     </property>
+    </widget>
+    <widget class="QDoubleSpinBox" name="upperBound">
+     <property name="geometry">
+      <rect>
+       <x>135</x>
+       <y>150</y>
+       <width>95</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="decimals">
+      <number>7</number>
+     </property>
+     <property name="minimum">
+      <double>-360.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>360.000000000000000</double>
+     </property>
+    </widget>
+    <widget class="QLabel" name="rasterBoundsLabel">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>165</y>
+       <width>71</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Bounds:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="upperLabel">
+     <property name="geometry">
+      <rect>
+       <x>119</x>
+       <y>150</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>N</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lowerLabel">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>150</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>S</string>
+     </property>
+    </widget>
+    <widget class="QDoubleSpinBox" name="lowerBound">
+     <property name="geometry">
+      <rect>
+       <x>255</x>
+       <y>150</y>
+       <width>95</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="decimals">
+      <number>7</number>
+     </property>
+     <property name="minimum">
+      <double>-360.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>360.000000000000000</double>
+     </property>
+    </widget>
+    <widget class="QDoubleSpinBox" name="leftBound">
+     <property name="geometry">
+      <rect>
+       <x>135</x>
+       <y>185</y>
+       <width>95</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="decimals">
+      <number>7</number>
+     </property>
+     <property name="minimum">
+      <double>-360.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>360.000000000000000</double>
+     </property>
+    </widget>
+    <widget class="QLabel" name="leftLabel">
+     <property name="geometry">
+      <rect>
+       <x>117</x>
+       <y>185</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>W</string>
+     </property>
+    </widget>
+    <widget class="QDoubleSpinBox" name="rightBound">
+     <property name="geometry">
+      <rect>
+       <x>255</x>
+       <y>185</y>
+       <width>95</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="decimals">
+      <number>7</number>
+     </property>
+     <property name="minimum">
+      <double>-360.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>360.000000000000000</double>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lowerLabel_2">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>185</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>E</string>
      </property>
     </widget>
    </widget>
