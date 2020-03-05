@@ -82,6 +82,12 @@
     </widget>
     <addaction name="menuAdd_Layer"/>
    </widget>
+   <widget class="QMenu" name="menuVector_Computing">
+    <property name="title">
+     <string>Vector Computing</string>
+    </property>
+    <addaction name="actionBuffer"/>
+   </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
      <string>Tools</string>
@@ -92,6 +98,7 @@
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
    <addaction name="menuLayers"/>
+   <addaction name="menuVector_Computing"/>
    <addaction name="menuTools"/>
   </widget>
   <action name="actionLayers_Window">
@@ -156,6 +163,11 @@
   <action name="actionOpen_geojson_io">
    <property name="text">
     <string>Open geojson.io</string>
+   </property>
+  </action>
+  <action name="actionBuffer">
+   <property name="text">
+    <string>Buffer</string>
    </property>
   </action>
  </widget>

@@ -1,11 +1,12 @@
-import folium
-from Core.Exceptions import LayerAddingException, MapCreatingException, FileOpeningException
+import geojson
+from Core.Exceptions import LayerAddingException, MapCreatingException, FileOpeningException, LayerNotFoundException
 from Core.Utilities import image_to_data, split_data_to_blocks
 from Core.Layers import VectorLayer, RasterLayer
 from Core.Templates import DEFAULT_HTML, MAP_CREATION_SCRIPT, OSM_TILE_CREATION_SCRIPT, ADD_TILE_TO_MAP_SCRIPT,\
     GEOJSON_LAYER_CREATION_SCRIPT, GEOJSON_LAYER_ADD_DATA_SCRIPT, REMOVE_LAYER_SCRIPT, RASTER_LAYER_CREATION_SCRIPT
-from PyQt5.QtWebEngineWidgets import QWebEngineScript
+from Core import Computing
 from PyQt5.QtCore import QDir, QUrl
+from PyQt5.QtWidgets import QMessageBox
 import os
 
 
@@ -31,6 +32,8 @@ class View:
             else:
                 try:
                     self.load(self.save_file_path)
+                except LayerAddingException as ex:
+                    self.ui.project_opened(False, self.window, ex.message)
                 except FileOpeningException as ex:
                     self.ui.project_opened(False, self.window, ex.message)
                 except MapCreatingException as ex:
@@ -38,12 +41,15 @@ class View:
                 else:
                     self.ui.project_opened(True, self.window)
 
-    def has_layer(self, layer_name):
-        checker = False
-        for layer in self.layers:
-            if layer.name == layer_name:
-                checker = True
-        return checker
+    def has_layer(self, layer_name, return_index=False):
+        index = -1
+        for i in range(0, len(self.layers)):
+            if self.layers[i].name == layer_name:
+                index = i
+        if return_index:
+            return index
+        else:
+            return index != -1
 
     def add_map_layer(self, layer_name, map_type):
         if self.has_layer(layer_name):
@@ -78,19 +84,23 @@ class View:
             raise LayerAddingException("Layer with this name is already added")
         if data is None:
             try:
-                geo_file = folium.GeoJson(file_path, name=layer_name)
+                geo_file = open(file_path, 'r')
+                geo_data = geojson.load(geo_file)
+                geo_file.close()
             except Exception:
                 raise FileOpeningException("File can't be read!")
             else:
-                self.layers.append(VectorLayer(layer_name, geo_file.data))
+                self.layers.append(VectorLayer(layer_name, str(geo_data)))
                 self.window.page().runJavaScript(GEOJSON_LAYER_CREATION_SCRIPT % (layer_name, layer_name))
-                self.window.page().runJavaScript(GEOJSON_LAYER_ADD_DATA_SCRIPT % (layer_name, geo_file.data))
+                self.window.page().runJavaScript(GEOJSON_LAYER_ADD_DATA_SCRIPT % (layer_name, str(geo_data)))
         else:
             self.layers.append(VectorLayer(layer_name, data))
             self.window.page().runJavaScript(GEOJSON_LAYER_CREATION_SCRIPT % (layer_name, layer_name))
             self.window.page().runJavaScript(GEOJSON_LAYER_ADD_DATA_SCRIPT % (layer_name, data))
 
     def remove_layer(self, layer_name):
+        if not self.has_layer(layer_name):
+            raise LayerNotFoundException("Layer not found")
         index_to_delete = None
         for i in range(0, len(self.layers)):
             if self.layers[i].name == layer_name:
@@ -114,12 +124,16 @@ class View:
             """ % (variable_name, block))
 
     def save(self):
-        file = open(self.save_file_path, 'w')
-        lines = ['[GISmin save]\n', self.map_tiles + "\n"]
-        for layer in self.layers:
-            lines.append(layer.to_save() + "\n")
-        file.writelines(lines)
-        file.close()
+        try:
+            file = open(self.save_file_path, 'w')
+            lines = ['[GISmin save]\n', self.map_tiles + "\n"]
+            for layer in self.layers:
+                lines.append(layer.to_save() + "\n")
+            file.writelines(lines)
+            file.close()
+            self.ui.show_message("File saved!", "Success", QMessageBox.Information)
+        except Exception:
+            self.ui.show_message("Error occurred", "Error", QMessageBox.Critical)
 
     def load(self, path):
         try:
@@ -151,3 +165,19 @@ class View:
             file.close()
             raise FileOpeningException("Bad file!")
         file.close()
+
+    def update_vector_layer(self, layer_name, data):
+        if not self.has_layer(layer_name):
+            raise LayerNotFoundException("Layer not found")
+        self.window.page().runJavaScript(REMOVE_LAYER_SCRIPT % layer_name)
+        self.window.page().runJavaScript(GEOJSON_LAYER_CREATION_SCRIPT % (layer_name, layer_name))
+        self.window.page().runJavaScript(GEOJSON_LAYER_ADD_DATA_SCRIPT % (layer_name, str(data)))
+
+    def buffer_layer(self, layer_name, distance, segments=1, cap_style=1, join_style=1, mitre_limit=1.0):
+        index = self.has_layer(layer_name, True)
+        if index == -1:
+            raise LayerNotFoundException("Layer not found")
+
+        self.layers[index].data = Computing.buffer(self.layers[index], distance, segments,
+                                                   cap_style, join_style, mitre_limit)
+        self.update_vector_layer(layer_name, self.layers[index].data)

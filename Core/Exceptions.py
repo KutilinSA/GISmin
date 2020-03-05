@@ -20,3 +20,15 @@ class FileOpeningException(Exception):
     def __init__(self, message):
         super().__init__(message)
         self.message = message
+
+
+class NotVectorLayer(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+        self.message = message
+
+
+class LayerNotFoundException(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+        self.message = message

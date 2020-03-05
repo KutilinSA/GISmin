@@ -2,3 +2,4 @@ PyQT5
 folium
 numpy
 shapely
+geojson
