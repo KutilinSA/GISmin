@@ -143,6 +143,9 @@
      <height>400</height>
     </rect>
    </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::CustomContextMenu</enum>
+   </property>
    <property name="styleSheet">
     <string notr="true">padding-top: 50px;
 padding-bottom: 45px;</string>

@@ -47,27 +47,12 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="rasterLayerTab">
     <attribute name="title">
      <string>Raster</string>
     </attribute>
-    <widget class="QPlainTextEdit" name="rasterLayerName">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>40</y>
-       <width>500</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>17</pointsize>
-      </font>
-     </property>
-    </widget>
     <widget class="QLabel" name="rasterLayerNameLabel">
      <property name="geometry">
       <rect>
@@ -90,7 +75,7 @@
      <property name="geometry">
       <rect>
        <x>420</x>
-       <y>180</y>
+       <y>210</y>
        <width>121</width>
        <height>31</height>
       </rect>
@@ -99,6 +84,9 @@
       <font>
        <pointsize>13</pointsize>
       </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
      </property>
      <property name="text">
       <string>Add Layer</string>
@@ -137,38 +125,14 @@
        <height>31</height>
       </rect>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <property name="text">
       <string>Open</string>
      </property>
      <property name="autoDefault">
       <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QPlainTextEdit" name="rasterFilePathName">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>110</y>
-       <width>405</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>17</pointsize>
-      </font>
-     </property>
-     <property name="inputMethodHints">
-      <set>Qt::ImhNone</set>
-     </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
-     </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
-     </property>
-     <property name="lineWrapMode">
-      <enum>QPlainTextEdit::NoWrap</enum>
      </property>
     </widget>
     <widget class="QDoubleSpinBox" name="upperBound">
@@ -179,6 +143,9 @@
        <width>95</width>
        <height>24</height>
       </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
      </property>
      <property name="decimals">
       <number>7</number>
@@ -253,6 +220,9 @@
        <height>24</height>
       </rect>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <property name="decimals">
       <number>7</number>
      </property>
@@ -271,6 +241,9 @@
        <width>95</width>
        <height>24</height>
       </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
      </property>
      <property name="decimals">
       <number>7</number>
@@ -309,6 +282,9 @@
        <height>24</height>
       </rect>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <property name="decimals">
       <number>7</number>
      </property>
@@ -319,7 +295,7 @@
       <double>360.000000000000000</double>
      </property>
     </widget>
-    <widget class="QLabel" name="lowerLabel_2">
+    <widget class="QLabel" name="rightLabel">
      <property name="geometry">
       <rect>
        <x>240</x>
@@ -337,12 +313,7 @@
       <string>E</string>
      </property>
     </widget>
-   </widget>
-   <widget class="QWidget" name="vectorLayerTab">
-    <attribute name="title">
-     <string>Vector</string>
-    </attribute>
-    <widget class="QPlainTextEdit" name="vectorLayerName">
+    <widget class="QLineEdit" name="rasterLayerName">
      <property name="geometry">
       <rect>
        <x>40</x>
@@ -353,19 +324,42 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>17</pointsize>
+       <pointsize>16</pointsize>
       </font>
      </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
      </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
-     </property>
-     <property name="lineWrapMode">
-      <enum>QPlainTextEdit::NoWrap</enum>
+     <property name="placeholderText">
+      <string>Layer name</string>
      </property>
     </widget>
+    <widget class="QLineEdit" name="rasterFilePathName">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>110</y>
+       <width>405</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="placeholderText">
+      <string>File path</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="vectorLayerTab">
+    <attribute name="title">
+     <string>Vector</string>
+    </attribute>
     <widget class="QLabel" name="vectorLayerNameLabel">
      <property name="geometry">
       <rect>
@@ -382,33 +376,6 @@
      </property>
      <property name="text">
       <string>Enter layer name</string>
-     </property>
-    </widget>
-    <widget class="QPlainTextEdit" name="vectorFilePathName">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>110</y>
-       <width>405</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>17</pointsize>
-      </font>
-     </property>
-     <property name="inputMethodHints">
-      <set>Qt::ImhNone</set>
-     </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
-     </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
-     </property>
-     <property name="lineWrapMode">
-      <enum>QPlainTextEdit::NoWrap</enum>
      </property>
     </widget>
     <widget class="QLabel" name="vectorFileNameLabel">
@@ -438,6 +405,9 @@
        <height>31</height>
       </rect>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <property name="text">
       <string>Open</string>
      </property>
@@ -459,6 +429,9 @@
        <pointsize>13</pointsize>
       </font>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <property name="text">
       <string>Add Layer</string>
      </property>
@@ -467,6 +440,48 @@
      </property>
      <property name="default">
       <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="vectorLayerName">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>40</y>
+       <width>500</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="placeholderText">
+      <string>Layer name</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="vectorFilePathName">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>110</y>
+       <width>405</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="placeholderText">
+      <string>File path</string>
      </property>
     </widget>
    </widget>

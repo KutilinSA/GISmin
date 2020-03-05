@@ -96,7 +96,7 @@ class View:
         else:
             self.layers.append(VectorLayer(layer_name, data))
             self.window.page().runJavaScript(GEOJSON_LAYER_CREATION_SCRIPT % (layer_name, layer_name))
-            self.window.page().runJavaScript(GEOJSON_LAYER_ADD_DATA_SCRIPT % (layer_name, data))
+            self.window.page().runJavaScript(GEOJSON_LAYER_ADD_DATA_SCRIPT % (layer_name, str(data)))
 
     def remove_layer(self, layer_name):
         if not self.has_layer(layer_name):
@@ -173,11 +173,20 @@ class View:
         self.window.page().runJavaScript(GEOJSON_LAYER_CREATION_SCRIPT % (layer_name, layer_name))
         self.window.page().runJavaScript(GEOJSON_LAYER_ADD_DATA_SCRIPT % (layer_name, str(data)))
 
-    def buffer_layer(self, layer_name, distance, segments=1, cap_style=1, join_style=1, mitre_limit=1.0):
+    def buffer_layer(self, layer_name, distance, segments=1, cap_style=1,
+                     join_style=1, mitre_limit=1.0, result_layer_name=None):
         index = self.has_layer(layer_name, True)
         if index == -1:
             raise LayerNotFoundException("Layer not found")
 
-        self.layers[index].data = Computing.buffer(self.layers[index], distance, segments,
-                                                   cap_style, join_style, mitre_limit)
-        self.update_vector_layer(layer_name, self.layers[index].data)
+        buffer_result = Computing.buffer(self.layers[index], distance, segments,
+                                         cap_style, join_style, mitre_limit)
+        if result_layer_name is None:
+            self.layers[index].data = buffer_result
+            self.update_vector_layer(layer_name, self.layers[index].data)
+        else:
+            if self.has_layer(result_layer_name):
+                self.window.page().runJavaScript(GEOJSON_LAYER_ADD_DATA_SCRIPT %
+                                                 (result_layer_name, str(buffer_result)))
+            else:
+                self.add_vector_layer(result_layer_name, "", data=buffer_result)
