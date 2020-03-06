@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QPushButton, QTabWidget, QDoubleSpinBox, QDialog, QFileDialog, QMessageBox,\
-    QListWidget, QComboBox, QSpinBox, QLineEdit, QCheckBox, QMenu
+    QListWidget, QComboBox, QSpinBox, QLineEdit, QCheckBox, QMenu, QAction
 from Core.Exceptions import FileOpeningException, LayerAddingException, LayerNotFoundException
 
 
@@ -101,9 +101,34 @@ class LayersWindow(Element):
         super().__init__(LayersWindow.OBJECTS, ui_path, QDialog(self.parent.element))
 
     def initialize(self):
+        self.elements["layersList"].customContextMenuRequested.connect(self.show_layers_list_context_menu)
         self.elements["addLayerButton"].clicked.connect(self.ui.show_add_layer_window)
         self.elements["removeLayerButton"].clicked.connect(self.remove_layer)
         self.element.rejected.connect(self.hide)
+
+    def show_layers_list_context_menu(self, point):
+        if self.elements["layersList"].itemAt(point):
+            layer_name = self.elements["layersList"].itemAt(point).text()
+            context_menu = QMenu()
+
+            info_action = QAction("Is visible", context_menu)
+            info_action.setCheckable(True)
+            info_action.setChecked(self.ui.view.has_layer(layer_name, True).is_visible)
+            info_action.toggled.connect(lambda checked: self.ui.view.set_visible(layer_name, True) if checked else
+                                        self.ui.view.set_visible(layer_name, False))
+
+            bring_to_back_action = QAction("Bring to back", context_menu)
+            bring_to_back_action.triggered.connect(lambda _: self.ui.view.bring_to_back(layer_name))
+
+            bring_to_front_action = QAction("Bring to front", context_menu)
+            bring_to_front_action.triggered.connect(lambda _: self.ui.view.bring_to_front(layer_name))
+
+            context_menu.addAction(info_action)
+            context_menu.addAction(bring_to_back_action)
+            context_menu.addAction(bring_to_front_action)
+
+            point.setY(point.y() + 50)
+            context_menu.exec(self.elements["layersList"].mapToGlobal(point))
 
     def show(self):
         self.update_layers_list()
@@ -176,12 +201,18 @@ class BufferWindow(Element):
             result_layer_name = None
             if self.elements["resultToAnotherLayer"].checkState() == 2:
                 result_layer_name = self.elements["resultLayerName"].text()
-                if self.ui.view.has_layer(result_layer_name):
+                result_layer = self.ui.view.has_layer(result_layer_name, True)
+                if result_layer is not None:
+                    if result_layer.type != "vector":
+                        self.ui.show_message("Result can't be added to not vector layer", "Error",
+                                             QMessageBox.Critical, self.element)
+                        return
                     result = QMessageBox.question(self.element, 'Confirmation',
                                                   "Result will be added to existing layer",
                                                   QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
                     if result == QMessageBox.No:
                         return
+
                 else:
                     result = QMessageBox.question(self.element, 'Confirmation',
                                                   "Result will be added to new layer",

@@ -3,7 +3,8 @@ from Core.Exceptions import LayerAddingException, MapCreatingException, FileOpen
 from Core.Utilities import image_to_data, split_data_to_blocks
 from Core.Layers import VectorLayer, RasterLayer
 from Core.Templates import DEFAULT_HTML, MAP_CREATION_SCRIPT, OSM_TILE_CREATION_SCRIPT, ADD_TILE_TO_MAP_SCRIPT,\
-    GEOJSON_LAYER_CREATION_SCRIPT, GEOJSON_LAYER_ADD_DATA_SCRIPT, REMOVE_LAYER_SCRIPT, RASTER_LAYER_CREATION_SCRIPT
+    GEOJSON_LAYER_CREATION_SCRIPT, GEOJSON_LAYER_ADD_DATA_SCRIPT, REMOVE_LAYER_SCRIPT, RASTER_LAYER_CREATION_SCRIPT,\
+    SHOW_LAYER_SCRIPT, HIDE_LAYER_SCRIPT, BRING_TO_BACK_SCRIPT, BRING_TO_FRONT_SCRIPT
 from Core import Computing
 from PyQt5.QtCore import QDir, QUrl
 from PyQt5.QtWidgets import QMessageBox
@@ -41,13 +42,16 @@ class View:
                 else:
                     self.ui.project_opened(True, self.window)
 
-    def has_layer(self, layer_name, return_index=False):
+    def has_layer(self, layer_name, return_layer=False):
         index = -1
         for i in range(0, len(self.layers)):
             if self.layers[i].name == layer_name:
                 index = i
-        if return_index:
-            return index
+        if return_layer:
+            if index == -1:
+                return None
+            else:
+                return self.layers[index]
         else:
             return index != -1
 
@@ -99,20 +103,38 @@ class View:
             self.window.page().runJavaScript(GEOJSON_LAYER_ADD_DATA_SCRIPT % (layer_name, str(data)))
 
     def remove_layer(self, layer_name):
-        if not self.has_layer(layer_name):
+        layer = self.has_layer(layer_name, True)
+        if layer is None:
             raise LayerNotFoundException("Layer not found")
-        index_to_delete = None
-        for i in range(0, len(self.layers)):
-            if self.layers[i].name == layer_name:
-                index_to_delete = i
-                break
-        self.layers.pop(index_to_delete)
-        self.window.page().runJavaScript(REMOVE_LAYER_SCRIPT % layer_name)
+        self.layers.remove(layer)
+        self.window.page().runJavaScript(REMOVE_LAYER_SCRIPT % (layer_name, layer_name))
 
     @staticmethod
     def check_layer_name(layer_name):
         layer_name = layer_name.replace(" ", "")
         return len(layer_name) > 0
+
+    def set_visible(self, layer_name, is_visible):
+        layer = self.has_layer(layer_name, True)
+        if layer is None:
+            raise LayerNotFoundException("Layer not found")
+        layer.is_visible = is_visible
+        if layer.is_visible:
+            self.window.page().runJavaScript(SHOW_LAYER_SCRIPT % (layer_name, layer_name))
+        else:
+            self.window.page().runJavaScript(HIDE_LAYER_SCRIPT % (layer_name, layer_name))
+
+    def bring_to_back(self, layer_name):
+        layer = self.has_layer(layer_name, True)
+        if layer is None:
+            raise LayerNotFoundException("Layer not found")
+        self.window.page().runJavaScript(BRING_TO_BACK_SCRIPT % layer_name)
+
+    def bring_to_front(self, layer_name):
+        layer = self.has_layer(layer_name, True)
+        if layer is None:
+            raise LayerNotFoundException("Layer not found")
+        self.window.page().runJavaScript(BRING_TO_FRONT_SCRIPT % layer_name)
 
     def load_splitted_data(self, blocks, variable_name):
         self.window.page().runJavaScript("""
@@ -158,9 +180,18 @@ class View:
                 splitted_line[-1] = splitted_line[-1].replace("\n", "")
                 if splitted_line[0] == "raster":
                     self.add_raster_layer(splitted_line[1], "", [splitted_line[3], splitted_line[4]],
-                                          [splitted_line[5], splitted_line[6]], splitted_line[2])
+                                          [splitted_line[5], splitted_line[6]], splitted_line[7])
+                    if splitted_line[2] == "False":
+                        self.layers[-1].is_visible = False
+                    else:
+                        self.layers[-1].is_visible = True
                 elif splitted_line[0] == "vector":
-                    self.add_vector_layer(splitted_line[1], "", splitted_line[2])
+                    self.add_vector_layer(splitted_line[1], "", splitted_line[3])
+                    if splitted_line[2] == "False":
+                        self.layers[-1].is_visible = False
+                    else:
+                        self.layers[-1].is_visible = True
+
         except Exception:
             file.close()
             raise FileOpeningException("Bad file!")
@@ -169,21 +200,21 @@ class View:
     def update_vector_layer(self, layer_name, data):
         if not self.has_layer(layer_name):
             raise LayerNotFoundException("Layer not found")
-        self.window.page().runJavaScript(REMOVE_LAYER_SCRIPT % layer_name)
+        self.window.page().runJavaScript(REMOVE_LAYER_SCRIPT % (layer_name, layer_name))
         self.window.page().runJavaScript(GEOJSON_LAYER_CREATION_SCRIPT % (layer_name, layer_name))
         self.window.page().runJavaScript(GEOJSON_LAYER_ADD_DATA_SCRIPT % (layer_name, str(data)))
 
     def buffer_layer(self, layer_name, distance, segments=1, cap_style=1,
                      join_style=1, mitre_limit=1.0, result_layer_name=None):
-        index = self.has_layer(layer_name, True)
-        if index == -1:
+        layer = self.has_layer(layer_name, True)
+        if layer is None:
             raise LayerNotFoundException("Layer not found")
 
-        buffer_result = Computing.buffer(self.layers[index], distance, segments,
+        buffer_result = Computing.buffer(layer, distance, segments,
                                          cap_style, join_style, mitre_limit)
         if result_layer_name is None:
-            self.layers[index].data = buffer_result
-            self.update_vector_layer(layer_name, self.layers[index].data)
+            layer.data = buffer_result
+            self.update_vector_layer(layer_name, layer.data)
         else:
             if self.has_layer(result_layer_name):
                 self.window.page().runJavaScript(GEOJSON_LAYER_ADD_DATA_SCRIPT %

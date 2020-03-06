@@ -55,13 +55,15 @@ class UI:
 
     def new_project(self):
         self.hide_layers_window()
-        self.add_layer_window.element.hide()
+        self.add_layer_window.hide()
+        self.buffer_window.hide()
         self.view = View(self.main_window.element.centralWidget(), ui=self)
         self.update_layers_list()
 
     def open_project(self):
         self.hide_layers_window()
-        self.add_layer_window.element.hide()
+        self.add_layer_window.hide()
+        self.buffer_window.hide()
         options = QFileDialog.Options()
         file_name, _ = QFileDialog.getOpenFileName(self.main_window.element, "Open File", "",
                                                    "GISmin (*.gismin)", options=options)
@@ -110,9 +112,6 @@ class UI:
 
     def show_buffer_window(self):
         self.buffer_window.show()
-
-    def hide_buffer_window(self):
-        self.buffer_window.hide()
 
     def update_layers_list(self):
         self.layers_window.update_layers_list()

@@ -1,5 +1,6 @@
 from Application import Application
 import sys
 
-app = Application(sys.argv)
-app.run()
+if __name__ == "__main__":
+    app = Application(sys.argv)
+    app.run()

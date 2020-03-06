@@ -92,4 +92,25 @@ RASTER_LAYER_CREATION_SCRIPT = """
 
 REMOVE_LAYER_SCRIPT = """
     mainMap.removeLayer(layers["%s"]);
+    delete layers["%s"];
+"""
+
+SHOW_LAYER_SCRIPT = """
+    if (!mainMap.hasLayer(layers["%s"])) {
+        layers["%s"].addTo(mainMap);
+    }
+"""
+
+HIDE_LAYER_SCRIPT = """
+    if (mainMap.hasLayer(layers["%s"])) {
+        mainMap.removeLayer(layers["%s"]);
+    }
+"""
+
+BRING_TO_BACK_SCRIPT = """
+    layers["%s"].bringToBack();
+"""
+
+BRING_TO_FRONT_SCRIPT = """
+    layers["%s"].bringToFront();
 """
