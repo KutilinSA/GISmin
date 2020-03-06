@@ -1,0 +1,3 @@
+[GISmin save]
+OpenStreetMap
+vector|splitter|qwewe|splitter|True|splitter|{"features": [{"geometry": {"coordinates": [[36.716309, 55.47574], [37.96875, 55.655897], [37.496338, 56.0475], [38.518066, 56.0475], [38.485107, 55.702355], [38.078613, 55.453941], [36.859131, 55.397831]], "type": "LineString"}, "properties": {}, "type": "Feature"}], "type": "FeatureCollection"}

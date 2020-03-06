@@ -10,7 +10,7 @@ class Layer:
         self.is_visible = True
 
     def to_save(self):
-        return "%s;%s;%s" % (self.type, self.name, self.is_visible)
+        return "%s|splitter|%s|splitter|%s" % (self.type, self.name, self.is_visible)
 
 
 class RasterLayer(Layer):
@@ -20,8 +20,9 @@ class RasterLayer(Layer):
         self.bounds = bounds
 
     def to_save(self):
-        return "%s;%s;%s;%s;%s;%s;%s;%s" % (self.type, self.name, self.is_visible, self.bounds[0][0], self.bounds[0][1],
-                                            self.bounds[1][0], self.bounds[1][1], self.data)
+        return "%s|splitter|%s|splitter|%s|splitter|%s|splitter|%s|splitter|%s|splitter|%s|splitter|%s" %\
+               (self.type, self.name, self.is_visible, self.bounds[0][0], self.bounds[0][1],
+                self.bounds[1][0], self.bounds[1][1], self.data)
 
 
 class VectorLayer(Layer):
@@ -30,4 +31,4 @@ class VectorLayer(Layer):
         self.data = data
 
     def to_save(self):
-        return "%s;%s;%s;%s" % (self.type, self.name, self.is_visible, self.data)
+        return "%s|splitter|%s|splitter|%s|splitter|%s" % (self.type, self.name, self.is_visible, self.data)

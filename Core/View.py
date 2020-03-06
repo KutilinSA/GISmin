@@ -176,21 +176,21 @@ class View:
                                              ADD_TILE_TO_MAP_SCRIPT)
             for i in range(2, len(lines)):
                 line = lines[i]
-                splitted_line = line.split(";")
+                splitted_line = line.split("|splitter|")
                 splitted_line[-1] = splitted_line[-1].replace("\n", "")
                 if splitted_line[0] == "raster":
                     self.add_raster_layer(splitted_line[1], "", [splitted_line[3], splitted_line[4]],
                                           [splitted_line[5], splitted_line[6]], splitted_line[7])
                     if splitted_line[2] == "False":
-                        self.layers[-1].is_visible = False
+                        self.set_visible(splitted_line[1], False)
                     else:
-                        self.layers[-1].is_visible = True
+                        self.set_visible(splitted_line[1], True)
                 elif splitted_line[0] == "vector":
                     self.add_vector_layer(splitted_line[1], "", splitted_line[3])
                     if splitted_line[2] == "False":
-                        self.layers[-1].is_visible = False
+                        self.set_visible(splitted_line[1], False)
                     else:
-                        self.layers[-1].is_visible = True
+                        self.set_visible(splitted_line[1], True)
 
         except Exception:
             file.close()
