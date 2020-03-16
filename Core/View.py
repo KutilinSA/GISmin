@@ -1,6 +1,6 @@
 import geojson
 from Core.Exceptions import LayerAddingException, MapCreatingException, FileOpeningException, LayerNotFoundException
-from Core.Utilities import image_to_data, split_data_to_blocks
+from Core.Utilities import image_to_data
 from Core.Layers import VectorLayer, RasterLayer
 from Core.Templates import DEFAULT_HTML, MAP_CREATION_SCRIPT, OSM_TILE_CREATION_SCRIPT, ADD_TILE_TO_MAP_SCRIPT,\
     GEOJSON_LAYER_CREATION_SCRIPT, GEOJSON_LAYER_ADD_DATA_SCRIPT, REMOVE_LAYER_SCRIPT, RASTER_LAYER_CREATION_SCRIPT,\
@@ -221,3 +221,18 @@ class View:
                                                  (result_layer_name, str(buffer_result)))
             else:
                 self.add_vector_layer(result_layer_name, "", data=buffer_result)
+
+    def intersect_layers(self, first_layer_name, second_layer_name, result_layer_name):
+        first_layer = self.has_layer(first_layer_name, True)
+        second_layer = self.has_layer(second_layer_name, True)
+        if first_layer is None or second_layer is None:
+            raise LayerNotFoundException("Layer not found")
+
+        intersection_result = Computing.intersection(first_layer, second_layer)
+
+        if self.has_layer(result_layer_name):
+            self.window.page().runJavaScript(GEOJSON_LAYER_ADD_DATA_SCRIPT %
+                                             (result_layer_name, str(intersection_result)))
+        else:
+            self.add_vector_layer(result_layer_name, "", data=intersection_result)
+

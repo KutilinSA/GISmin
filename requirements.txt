@@ -1,5 +1,6 @@
 PyQT5
-folium
 numpy
 shapely
 geojson
+gdal
+PyQtWebEngine

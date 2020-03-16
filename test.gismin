@@ -1,0 +1,4 @@
+[GISmin save]
+OpenStreetMap
+vector|splitter|test1|splitter|True|splitter|{"features": [{"geometry": {"coordinates": [[[37.243652, 56.480695], [37.243652, 54.380557], [38.0896, 54.342149], [37.979736, 56.674338], [37.243652, 56.480695]]], "type": "Polygon"}, "properties": {}, "type": "Feature"}, {"geometry": {"coordinates": [[[34.431152, 56.389584], [34.365234, 53.807139], [35.892334, 53.774689], [35.81543, 56.334812], [34.431152, 56.389584]]], "type": "Polygon"}, "properties": {}, "type": "Feature"}], "type": "FeatureCollection"}
+vector|splitter|test2|splitter|True|splitter|{"features": [{"geometry": {"coordinates": [[[32.838135, 55.128649], [40.100098, 55.128649], [40.100098, 56.151669], [32.838135, 56.151669], [32.838135, 55.128649]]], "type": "Polygon"}, "properties": {}, "type": "Feature"}], "type": "FeatureCollection"}
