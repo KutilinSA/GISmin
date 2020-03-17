@@ -87,6 +87,7 @@
      <string>Vector Computing</string>
     </property>
     <addaction name="actionBuffer"/>
+    <addaction name="actionIntersection"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -168,6 +169,11 @@
   <action name="actionBuffer">
    <property name="text">
     <string>Buffer</string>
+   </property>
+  </action>
+  <action name="actionIntersection">
+   <property name="text">
+    <string>Intersection</string>
    </property>
   </action>
  </widget>

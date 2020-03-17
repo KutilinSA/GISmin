@@ -4,7 +4,7 @@ from Core.Exceptions import LayerCreatingException
 class Layer:
     def __init__(self, name, layer_type):
         if layer_type not in ['raster', 'vector']:
-            raise LayerCreatingException("undefined type of layer")
+            raise LayerCreatingException("Undefined type of layer")
         self.name = name
         self.type = layer_type
         self.is_visible = True

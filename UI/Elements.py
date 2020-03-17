@@ -227,3 +227,10 @@ class BufferWindow(Element):
             self.ui.show_message(ex.message, "Error", QMessageBox.Critical, self.element)
         except LayerAddingException as ex:
             self.ui.show_message(ex.message, "Error", QMessageBox.Critical, self.element)
+
+
+class IntersectionWindow(Element):
+    OBJECTS = [(QComboBox, "firstLayerName"), (QComboBox, "secondLayerName"), (QLineEdit, "resultLayerName")]
+
+    def __init__(self):
+        pass

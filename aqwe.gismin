@@ -1,0 +1,3 @@
+[GISmin save]
+OpenStreetMap
+vector|splitter|qwe|splitter|True|splitter|{"features": [{"geometry": {"coordinates": [], "type": "Polygon"}, "properties": {}, "type": "Feature"}], "type": "FeatureCollection"}
